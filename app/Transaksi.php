@@ -20,7 +20,7 @@ class Transaksi extends Model
 
     public function buku(){
 
-        return $this->belongsTo(Buku::class);
+        return $this->belongsToMany(Buku::class);
     }
 
     public function user(){

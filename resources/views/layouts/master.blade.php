@@ -23,10 +23,14 @@
     {{-- material dsign --}}
     <link rel="stylesheet" href="{{ asset('materialdesignicons.min.css') }}">
     {{-- <link rel="stylesheet" href="{{ asset('bootstrap.min.css') }}"> --}}
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     @toastr_css
+
+    @yield('css')
     </head>
 
 
@@ -189,6 +193,8 @@
     <script src="{{ asset('template') }}/vendor/js-cookie/js.cookie.js"></script>
     <script src="{{ asset('template') }}/vendor/jquery.scrollbar/jquery.scrollbar.min.js"></script>
     <script src="{{ asset('template') }}/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+
     <!-- Optional JS -->
     <script src="{{ asset('template') }}/vendor/chart.js/dist/Chart.min.js"></script>
     <script src="{{ asset('template') }}/vendor/chart.js/dist/Chart.extension.js"></script>

@@ -1,5 +1,14 @@
 @extends('layouts.master')
 
+@section('css')
+    {{-- <style>
+        button[data-toggle="dropdown"].btn-default,
+        button[data-toggle="dropdown"] {
+        background-color: white;
+        }
+    </style> --}}
+@endsection
+
 @section('content')
 <div class="row d-flex justify-content-center">
     <div class="col-md-8 mt-4">
@@ -19,8 +28,7 @@
                 </div>
                 <div class="form-group">
                     <label>Buku</label>
-                    <select name="buku_id" class="form-control">
-                        <option disabled selected>-- Pilih Buku --</option>
+                    <select name="buku_id[]" class="form-control selectpicker" multiple data-max-options="2">
                         @foreach ($buku as $item)
                         <option value="{{ $item->id }}">{{ $item->judul }}</option>
                         @endforeach
@@ -57,4 +65,10 @@
     </div>
 </div>    
 @endsection
+
+@push('script')
+    <script>
+        $('.selectpicker').selectpicker();
+    </script>
+@endpush
 

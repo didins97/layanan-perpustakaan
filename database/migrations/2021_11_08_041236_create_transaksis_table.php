@@ -20,7 +20,8 @@ class CreateTransaksisTable extends Migration
             $table->date('tgl_kembali');
             $table->enum('status',['pinjam','kembali']);
             $table->text('ket')->nullable();
-            $table->foreignId('buku_id')->constrained('buku');
+            $table->foreignId('anggota_id')->constrained('anggota');
+            // $table->foreignId('buku_id')->constrained('buku');
             $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
             $table->softDeletes();

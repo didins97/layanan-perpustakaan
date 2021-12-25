@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use PhpParser\Node\Stmt\TryCatch;
 
+use function GuzzleHttp\Promise\each;
+
 class TransaksiController extends Controller
 {
     /**
@@ -23,7 +25,14 @@ class TransaksiController extends Controller
     {
         $title = 'Daftar Transaksi';
         $transaksi = Transaksi::with('anggota','buku','user')->orderBy('created_at','desc')->paginate(6);
-        return view('transaksi.index',compact('title','transaksi'));
+        foreach ($transaksi as $key) {
+            // return $key->buku->whereIn('id', [1,2]);
+            foreach ($key->buku as $kay) {
+                // $key->buku->whereIn('id', [$kay->id])->update(['jumlah_buku' => $kay->jumlah_buku -1]);
+                echo $kay->jumlah_buku;
+            }
+        }
+        // return view('transaksi.index',compact('title','transaksi'));
     }
 
     /**
@@ -73,7 +82,7 @@ class TransaksiController extends Controller
 
                 'anggota_id' => $anggota_id,
                 'kode_transaksi' => Str::random(10),
-                'buku_id' => $request->buku_id,
+                // 'buku_id' => $request->buku_id,
                 'tgl_pinjam' => $request->tgl_pinjam,
                 'tgl_kembali' => $request->tgl_kembali,
                 'status' => 'pinjam',
@@ -81,8 +90,13 @@ class TransaksiController extends Controller
                 'user_id' => Auth::user()->id
             ]);
 
+            $transaksi->buku()->attach($request->buku_id);
+
             //jika transaksi dilakukan maka stock buku akan berkurang 
-            $transaksi->buku->where('id',$transaksi->buku_id)->update(['jumlah_buku' => $transaksi->buku->jumlah_buku -1]);
+            foreach ($transaksi->buku as $key) {
+                $transaksi->buku->whereIn('id',[$key->id])->update(['jumlah_buku' => $key->jumlah_buku -1]);
+            }
+            // $transaksi->buku->where('id',$transaksi->buku_id)->update(['jumlah_buku' => $transaksi->buku->jumlah_buku -1]);
             return redirect('transaksi')->with('success','transaksi anda berhasil!');
         } else {
             toastr()->error('Anggota Tidak Terdaftar, Periksa Kembali Nim Anggota');
@@ -151,8 +165,7 @@ class TransaksiController extends Controller
             ]);
 
             //jika transaksi dilakukan maka stock buku akan berkurang 
-            $transaksi->buku->where('id',$transaksi->buku_id)->update(['jumlah_buku' => $transaksi->buku->jumlah_buku +1]);
-
+            $transaksi->buku->whereIn('id',$transaksi->buku_id)->update(['jumlah_buku' => $transaksi->buku->jumlah_buku -1]);
             return redirect('transaksi')->with('success','transaksi berhasil diupdate');
         } else {
             toastr()->error('Anggota Tidak Terdaftar, Periksa Kembali Nim Anggota');
